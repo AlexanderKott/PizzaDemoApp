@@ -27,30 +27,30 @@ class MainViewModel(
     private val getBanners: GetBannersUseCase
 ) : ViewModel() {
 
-
     private var foodItems = ArrayList<GoodItem>()
     private val menuItemsTrigger = MutableSharedFlow<String>(replay = 1)
     val menuItems: StateFlow<Menu> = flow {
         menuItemsTrigger.emit(MenuDirectoryID.MEAT.id)
         menuItemsTrigger.collect { value ->
-            Log.e("eeeee", "request $value")
-            val result = getFood.execute(value)
-            foodItems.clear()
-            foodItems.addAll(result)
-            emit(Menu.MenuItems(items = foodItems.toList()) as Menu)
-        }
-    }
-        .catch { throwable->
-            when (throwable) {
-                is android.system.ErrnoException, is java.net.UnknownHostException -> {
-                    emit(Menu.NoInternetError)
-                }
+            try {
+                val result = getFood.execute(value)
+                foodItems.clear()
+                foodItems.addAll(result)
+                emit(Menu.MenuItems(items = foodItems.toList()) as Menu)
 
-                else -> {
-                         emit(Menu.NetworkError)
+            } catch (e : Throwable){
+                when (e) {
+                    is android.system.ErrnoException, is java.net.UnknownHostException -> {
+                        emit(Menu.NoInternetError)
+                    }
+                    else -> {
+                        emit(Menu.NetworkError)
+                    }
                 }
             }
+
         }
+    }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Lazily,
