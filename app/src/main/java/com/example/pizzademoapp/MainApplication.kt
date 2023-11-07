@@ -1,19 +1,19 @@
 package com.example.pizzademoapp
 
 import android.app.Application
-import com.example.pizzademoapp.di.appModule2
+import com.example.pizzademoapp.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 
-class MainApplication : Application(){
+class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        startKoin{
+        startKoin {
             androidLogger()
             androidContext(this@MainApplication)
-            modules(appModule2)
+            modules(appModule)
         }
     }
 }

@@ -38,11 +38,12 @@ class MainViewModel(
                 foodItems.addAll(result)
                 emit(Menu.MenuItems(items = foodItems.toList()) as Menu)
 
-            } catch (e : Throwable){
+            } catch (e: Throwable) {
                 when (e) {
                     is android.system.ErrnoException, is java.net.UnknownHostException -> {
                         emit(Menu.NoInternetError)
                     }
+
                     else -> {
                         emit(Menu.NetworkError)
                     }
@@ -50,8 +51,7 @@ class MainViewModel(
             }
 
         }
-    }
-        .stateIn(
+    }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.Lazily,
             initialValue = Menu.MenuItems(items = listOf())
@@ -64,10 +64,8 @@ class MainViewModel(
             val items = getAdds.execute()
             emit(items)
         }
-    } .stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Lazily,
-        initialValue = listOf()
+    }.stateIn(
+        scope = viewModelScope, started = SharingStarted.Lazily, initialValue = listOf()
     )
 
 
@@ -78,7 +76,7 @@ class MainViewModel(
             val banners = getBanners.execute()
             emit(Advertisement.Ads(items = banners))
         }
-    } .stateIn(
+    }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.Lazily,
         initialValue = Advertisement.Initial
@@ -87,7 +85,6 @@ class MainViewModel(
 
     fun requestMenuItemsById(strID: String) {
         viewModelScope.launch {
-            Log.e("eeeee", "trigger $strID")
             menuItemsTrigger.emit(strID)
         }
     }

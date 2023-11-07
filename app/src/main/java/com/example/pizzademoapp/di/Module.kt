@@ -12,7 +12,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 
-val appModule2 = module {
+val appModule = module {
 
   single<NetStorage> { NetStorageImpl() }
   factory { GetGoodsUseCase(get()) }
