@@ -10,15 +10,16 @@ import com.example.pizzademoapp.domain.usecases.GetMenuDirectoriesUseCase
 import com.example.pizzademoapp.presentation.models.Advertisement
 import com.example.pizzademoapp.presentation.models.Menu
 import com.example.pizzademoapp.presentation.models.MenuDerictoryItem
+import com.example.pizzademoapp.presentation.models.MenuDirectoryID
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-
 
 class MainViewModel(
     private val getFood: GetGoodsUseCase,
@@ -26,67 +27,68 @@ class MainViewModel(
     private val getBanners: GetBannersUseCase
 ) : ViewModel() {
 
-    val menuDirectoriesHorizontal = MutableStateFlow<List<MenuDerictoryItem>>(listOf())
-    val advertisement = MutableStateFlow<Advertisement>(Advertisement.Initial)
-
-    private val exceptionHandler = CoroutineExceptionHandler() { coroutineContext, throwable ->
-        when (throwable) {
-            is android.system.ErrnoException, is java.net.UnknownHostException -> {
-                viewModelScope.launch {
-                    // items.emit(Menu.NoInternetError)
-                    Log.e("eeeee", "Menu.NoInternetError")
-                }
-            }
-
-            else -> {
-                viewModelScope.launch {
-                    // items.emit(Menu.NetworkError)
-                    Log.e("eeeee", "Menu.NetworkError")
-                }
-            }
-
-        }
-    }
 
     private var foodItems = ArrayList<GoodItem>()
     private val menuItemsTrigger = MutableSharedFlow<String>(replay = 1)
     val menuItems: StateFlow<Menu> = flow {
-        menuItemsTrigger.emit("meat")
+        menuItemsTrigger.emit(MenuDirectoryID.MEAT.id)
         menuItemsTrigger.collect { value ->
-
-        val result = getFood.execute(value) //слазить в сеть за списком
-
-          val temp = ArrayList<GoodItem>()
-            temp.addAll(result)
-            foodItems = temp
-
-            emit(Menu.MenuItems(items = foodItems))
+            Log.e("eeeee", "request $value")
+            val result = getFood.execute(value)
+            foodItems.clear()
+            foodItems.addAll(result)
+            emit(Menu.MenuItems(items = foodItems.toList()) as Menu)
         }
-    }.stateIn(
+    }
+        .catch { throwable->
+            when (throwable) {
+                is android.system.ErrnoException, is java.net.UnknownHostException -> {
+                    emit(Menu.NoInternetError)
+                }
+
+                else -> {
+                         emit(Menu.NetworkError)
+                }
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = Menu.MenuItems(items = listOf())
+        )
+
+    private val menuDirectoriesHorizontalTrigger = MutableSharedFlow<Unit>(replay = 1)
+    val menuDirectoriesHorizontal: StateFlow<List<MenuDerictoryItem>> = flow {
+        menuDirectoriesHorizontalTrigger.emit(Unit)
+        menuDirectoriesHorizontalTrigger.collect {
+            val items = getAdds.execute()
+            emit(items)
+        }
+    } .stateIn(
         scope = viewModelScope,
         started = SharingStarted.Lazily,
-        initialValue = Menu.MenuItems(items = foodItems)
+        initialValue = listOf()
     )
 
 
-    //TODO
-    fun requestMenuItemsById(strID: String) {
-        viewModelScope.launch(exceptionHandler) {
-            menuItemsTrigger.emit(strID)
-        }
-
-    }
-
-    //TODO
-    fun loadAd() {
-        viewModelScope.launch {
-            val items = getAdds.execute()
-            menuDirectoriesHorizontal.emit(items)
-
+    private val advertisementTrigger = MutableSharedFlow<Unit>(replay = 1)
+    val advertisement: StateFlow<Advertisement> = flow {
+        advertisementTrigger.emit(Unit)
+        advertisementTrigger.collect {
             val banners = getBanners.execute()
-            advertisement.emit(Advertisement.Ads(items = banners))
-            //  requestMenuItemsById("meat")
+            emit(Advertisement.Ads(items = banners))
+        }
+    } .stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = Advertisement.Initial
+    )
 
+
+    fun requestMenuItemsById(strID: String) {
+        viewModelScope.launch {
+            Log.e("eeeee", "trigger $strID")
+            menuItemsTrigger.emit(strID)
         }
     }
 }

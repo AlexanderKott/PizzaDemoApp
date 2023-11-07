@@ -59,7 +59,4 @@ fun TopAdvertisement(viewModel: MainViewModel = koinViewModel()) {
         }
     }
 
-    SideEffect {
-        viewModel.loadAd()
-    }
 }
