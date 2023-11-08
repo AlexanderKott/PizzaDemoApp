@@ -8,3 +8,6 @@
 
 
 Стек: Koin, MVVM, Clean Architecture, Retrofit, Compose, Flow/Coroutines
+
+
+<img src="https://github.com/AlexanderKott/PizzaDemoApp/blob/main/1.JPG?raw=true" width="300"/>
