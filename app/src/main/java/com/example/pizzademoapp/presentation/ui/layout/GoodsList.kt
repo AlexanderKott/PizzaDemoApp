@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
@@ -89,102 +88,97 @@ fun GoodsList(paddingValues: PaddingValues, viewModel: MainViewModel = koinViewM
                 }
             }
 
-
             is Menu.MenuItems -> {
-               if (dishes.items.isEmpty()) {
-                   item {
-                       Text(
-                           modifier = Modifier.padding(8.dp),
-                           text = stringResource(R.string.list_is_empty)
-                       )
-                   }
-               } else {
-                   items(dishes.items) { item ->
-                       Card(
-                           onClick = { /*...*/ },
-                           elevation = CardDefaults.cardElevation(
-                               defaultElevation = 1.dp
-                           ),
-                           colors = CardDefaults.cardColors(
-                               containerColor = MaterialTheme.colorScheme.onPrimary,
-                           ),
-                           modifier = Modifier
-                               .fillMaxWidth()
-                       ) {
+                if (dishes.items.isEmpty()) {
+                    item {
+                        Text(
+                            modifier = Modifier.padding(8.dp),
+                            text = stringResource(R.string.list_is_empty)
+                        )
+                    }
+                } else {
+                    items(dishes.items) { item ->
+                        Card(
+                            onClick = { /*...*/ },
+                            elevation = CardDefaults.cardElevation(
+                                defaultElevation = 1.dp
+                            ),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.onPrimary,
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
 
-                           Row {
-                               AsyncImage(
-                                   model = ImageRequest.Builder(LocalContext.current)
-                                       .data(item.picture)
-                                       .crossfade(true)
-                                       .build(),
-                                   placeholder = painterResource(R.drawable.placeholder),
-                                   error = painterResource(R.drawable.placeholder),
-                                   contentDescription = null,
-                                   contentScale = ContentScale.Crop,
-                                   modifier = Modifier
-                                       .size(140.dp)
-                                       .padding(10.dp)
-                                       .clip(RoundedCornerShape(10.dp))
-                               )
+                            Row {
+                                AsyncImage(
+                                    model = ImageRequest.Builder(LocalContext.current)
+                                        .data(item.picture)
+                                        .crossfade(true)
+                                        .build(),
+                                    placeholder = painterResource(R.drawable.placeholder),
+                                    error = painterResource(R.drawable.placeholder),
+                                    contentDescription = null,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .size(140.dp)
+                                        .padding(10.dp)
+                                        .clip(RoundedCornerShape(10.dp))
+                                )
 
-                               Column() {
-                                   Text(
-                                       text = item.name,
-                                       modifier = Modifier
-                                           .padding(2.dp)
-                                           .fillMaxWidth(),
-                                       textAlign = TextAlign.Center,
-                                       fontWeight = FontWeight.Bold
-                                   )
+                                Column() {
+                                    Text(
+                                        text = item.name,
+                                        modifier = Modifier
+                                            .padding(2.dp)
+                                            .fillMaxWidth(),
+                                        textAlign = TextAlign.Center,
+                                        fontWeight = FontWeight.Bold
+                                    )
 
-                                   Text(
-                                       text = item.description,
-                                       modifier = Modifier
-                                           .padding(start = 7.dp)
-                                           .fillMaxWidth()
-                                       ,
-                                       color = Color.Gray,
-                                       lineHeight = 15.sp,
-                                       fontSize = 15.sp,
-                                       maxLines = 4,
-                                       textAlign = TextAlign.Left,
-                                       overflow = TextOverflow.Ellipsis
-                                   )
+                                    Text(
+                                        text = item.description,
+                                        modifier = Modifier
+                                            .padding(start = 7.dp)
+                                            .fillMaxWidth(),
+                                        color = Color.Gray,
+                                        lineHeight = 15.sp,
+                                        fontSize = 15.sp,
+                                        maxLines = 4,
+                                        textAlign = TextAlign.Left,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
 
-                                   Row {
-                                       Spacer(modifier = Modifier
-                                           .width(1.dp)
-                                           .weight(1f))
-                                       OutlinedButton(
-                                           modifier = Modifier.defaultMinSize(minWidth = 3.dp, minHeight = 3.dp)
-                                           ,
-                                           onClick = { /*TODO*/ },
-                                           shape = CutCornerShape(2.dp),
-                                           border = BorderStroke(width = 1.dp, color = Color.Red),
-                                           contentPadding = PaddingValues(7.dp),
-                                           colors = ButtonDefaults.textButtonColors(
-                                               contentColor = Color.Red
-                                           ),
+                                    Row {
+                                        Spacer(
+                                            modifier = Modifier
+                                                .width(1.dp)
+                                                .weight(1f)
+                                        )
+                                        OutlinedButton(
+                                            modifier = Modifier.defaultMinSize(
+                                                minWidth = 3.dp,
+                                                minHeight = 3.dp
+                                            ),
+                                            onClick = { /*TODO*/ },
+                                            shape = CutCornerShape(2.dp),
+                                            border = BorderStroke(width = 1.dp, color = Color.Red),
+                                            contentPadding = PaddingValues(7.dp),
+                                            colors = ButtonDefaults.textButtonColors(
+                                                contentColor = Color.Red
+                                            ),
 
-                                           ) {
-                                           Text(text = "от ${item.price} руб")
-                                       }
-                                       Spacer(modifier = Modifier.width(17.dp))
-                                   }
-
-                               }
-
-                           }
-
-                       }
-
-                   }
-               }
+                                            ) {
+                                            Text(text = "от ${item.price} руб")
+                                        }
+                                        Spacer(modifier = Modifier.width(17.dp))
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
-
-
         }
     }
-
 }

@@ -30,8 +30,6 @@ import kotlin.math.max
 import kotlin.math.roundToInt
 
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PizzaToolbar(
     modifier: Modifier = Modifier,
@@ -43,7 +41,7 @@ fun PizzaToolbar(
     collapsingTitle: CollapsingTitle? = null,
     collapsedContent: (@Composable () -> Unit)? = null,
     scrollBehavior: CustomToolbarScrollBehavior? = null,
-    collapsedElevation: Dp = DefaultCollapsedElevation,
+    collapsedElevation: Dp = defaultCollapsedElevation,
 ) {
     val collapsedFraction = when {
         scrollBehavior != null && centralContent == null -> scrollBehavior.state.collapsedFraction
@@ -52,7 +50,7 @@ fun PizzaToolbar(
     }
 
     val fullyCollapsedTitleScale = when {
-        collapsingTitle != null -> CollapsedTitleLineHeight.value / collapsingTitle.expandedTextStyle.lineHeight.value
+        collapsingTitle != null -> collapsedTitleLineHeight.value / collapsingTitle.expandedTextStyle.lineHeight.value
         else -> 1f
     }
 
@@ -74,49 +72,50 @@ fun PizzaToolbar(
         Layout(
             content = {
 
-                if (topContent != null){
-                Box(
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .layoutId(TopContentId)
-                ) {
-                     topContent()
-                 }
+                if (topContent != null) {
+                    Box(
+                        modifier = Modifier
+                            .wrapContentSize()
+                            .layoutId(TOP_CONTENT_ID)
+                    ) {
+                        topContent()
+                    }
                 }
 
                 if (collapsedContent != null) {
-                    Row(modifier = Modifier
-                        .layoutId(ExpandedTitleId)
-                        .wrapContentHeight(align = Alignment.Top)
-                        .graphicsLayer(
-                            scaleX = collapsingTitleScale,
-                            scaleY = collapsingTitleScale,
-                            transformOrigin = TransformOrigin(0f, 0f)
-                        )) {
+                    Row(
+                        modifier = Modifier
+                            .layoutId(EXPANDED_TITLE_ID)
+                            .wrapContentHeight(align = Alignment.Top)
+                            .graphicsLayer(
+                                scaleX = collapsingTitleScale,
+                                scaleY = collapsingTitleScale,
+                                transformOrigin = TransformOrigin(0f, 0f)
+                            )
+                    ) {
                         collapsedContent()
                     }
 
 
-                    Column(modifier = Modifier
-                        .layoutId(CollapsedTitleId)
-                        .wrapContentHeight(align = Alignment.Top)
-                        .graphicsLayer(
-                            scaleX = collapsingTitleScale,
-                            scaleY = collapsingTitleScale,
-                            transformOrigin = TransformOrigin(0f, 0f)
-                        )) {
-                            ///////////
+                    Column(
+                        modifier = Modifier
+                            .layoutId(COLLAPSED_TITLE_ID)
+                            .wrapContentHeight(align = Alignment.Top)
+                            .graphicsLayer(
+                                scaleX = collapsingTitleScale,
+                                scaleY = collapsingTitleScale,
+                                transformOrigin = TransformOrigin(0f, 0f)
+                            )
+                    ) {
+                        ///////////
                     }
-
-
                 }
-
 
                 if (navigationIcon != null) {
                     Box(
                         modifier = Modifier
                             .wrapContentSize()
-                            .layoutId(NavigationIconId)
+                            .layoutId(NAVIGATION_ICON_ID)
                     ) {
                         navigationIcon()
                     }
@@ -126,7 +125,7 @@ fun PizzaToolbar(
                     Row(
                         modifier = Modifier
                             .wrapContentSize()
-                            .layoutId(ActionsId)
+                            .layoutId(ACTIONS_ID)
                     ) {
                         actions()
                     }
@@ -136,7 +135,7 @@ fun PizzaToolbar(
                     Box(
                         modifier = Modifier
                             .wrapContentSize()
-                            .layoutId(CentralContentId)
+                            .layoutId(CENTRAL_CONTENT_ID)
                     ) {
                         centralContent()
                     }
@@ -146,30 +145,30 @@ fun PizzaToolbar(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .layoutId(AdditionalContentId)
+                            .layoutId(ADDITIONAL_CONTENT_ID)
                     ) {
                         additionalContent()
                     }
                 }
             },
-            modifier = modifier.then(Modifier.heightIn(min = MinCollapsedHeight))
+            modifier = modifier.then(Modifier.heightIn(min = minCollapsedHeight))
         ) { measurables, constraints ->
-            val horizontalPaddingPx = HorizontalPadding.toPx()
-            val expandedTitleBottomPaddingPx = ExpandedTitleBottomPadding.toPx()
-
+            val horizontalPaddingPx = horizontalPadding.toPx()
+            val expandedTitleBottomPaddingPx = expandedTitleBottomPadding.toPx()
 
             // Measuring widgets inside toolbar:
 
-            val topContentPlaceable = measurables.firstOrNull { it.layoutId == TopContentId }
+            val topContentPlaceable = measurables.firstOrNull { it.layoutId == TOP_CONTENT_ID }
                 ?.measure(constraints)
 
-            val navigationIconPlaceable = measurables.firstOrNull { it.layoutId == NavigationIconId }
+            val navigationIconPlaceable =
+                measurables.firstOrNull { it.layoutId == NAVIGATION_ICON_ID }
+                    ?.measure(constraints.copy(minWidth = 0))
+
+            val actionsPlaceable = measurables.firstOrNull { it.layoutId == ACTIONS_ID }
                 ?.measure(constraints.copy(minWidth = 0))
 
-            val actionsPlaceable = measurables.firstOrNull { it.layoutId == ActionsId }
-                ?.measure(constraints.copy(minWidth = 0))
-
-            val expandedTitlePlaceable = measurables.firstOrNull { it.layoutId == ExpandedTitleId }
+            val expandedTitlePlaceable = measurables.firstOrNull { it.layoutId == EXPANDED_TITLE_ID }
                 ?.measure(
                     constraints.copy(
                         maxWidth = (constraints.maxWidth - 2 * horizontalPaddingPx).roundToInt(),
@@ -178,8 +177,9 @@ fun PizzaToolbar(
                     )
                 )
 
-            val additionalContentPlaceable = measurables.firstOrNull { it.layoutId == AdditionalContentId }
-                ?.measure(constraints)
+            val additionalContentPlaceable =
+                measurables.firstOrNull { it.layoutId == ADDITIONAL_CONTENT_ID }
+                    ?.measure(constraints)
 
 
             val navigationIconOffset = when (navigationIconPlaceable) {
@@ -195,31 +195,34 @@ fun PizzaToolbar(
             val collapsedTitleMaxWidthPx =
                 (constraints.maxWidth - navigationIconOffset - actionsOffset) / fullyCollapsedTitleScale
 
-            val collapsedTitlePlaceable = measurables.firstOrNull { it.layoutId == CollapsedTitleId }
-                ?.measure(
-                    constraints.copy(
-                        maxWidth = collapsedTitleMaxWidthPx.roundToInt(),
-                        minWidth = 0,
-                        minHeight = 0
+            val collapsedTitlePlaceable =
+                measurables.firstOrNull { it.layoutId == COLLAPSED_TITLE_ID }
+                    ?.measure(
+                        constraints.copy(
+                            maxWidth = collapsedTitleMaxWidthPx.roundToInt(),
+                            minWidth = 0,
+                            minHeight = 0
+                        )
                     )
-                )
 
-            val centralContentPlaceable = measurables.firstOrNull { it.layoutId == CentralContentId }
-                ?.measure(
-                    constraints.copy(
-                        minWidth = 0,
-                        maxWidth = (constraints.maxWidth - navigationIconOffset - actionsOffset).roundToInt()
+            val centralContentPlaceable =
+                measurables.firstOrNull { it.layoutId == CENTRAL_CONTENT_ID }
+                    ?.measure(
+                        constraints.copy(
+                            minWidth = 0,
+                            maxWidth = (constraints.maxWidth - navigationIconOffset - actionsOffset).roundToInt()
+                        )
                     )
-                )
 
             val collapsedHeightPx = when {
                 centralContentPlaceable != null ->
-                    max(MinCollapsedHeight.toPx(), centralContentPlaceable.height.toFloat())
-                else -> MinCollapsedHeight.toPx()
+                    max(minCollapsedHeight.toPx(), centralContentPlaceable.height.toFloat())
+
+                else -> minCollapsedHeight.toPx()
             }
 
 
-            val topContentHeight =  topContentPlaceable?.height ?: 0
+            val topContentHeight = topContentPlaceable?.height ?: 0
 
             var layoutHeightPx = collapsedHeightPx
 
@@ -228,10 +231,12 @@ fun PizzaToolbar(
 
             // Current coordinates of navigation icon
             val navigationIconX = horizontalPaddingPx.roundToInt()
-            val navigationIconY = ((collapsedHeightPx - (navigationIconPlaceable?.height ?: 0)) / 2).roundToInt()
+            val navigationIconY =
+                ((collapsedHeightPx - (navigationIconPlaceable?.height ?: 0)) / 2).roundToInt()
 
             // Current coordinates of actions
-            val actionsX = (constraints.maxWidth - (actionsPlaceable?.width ?: 0) - horizontalPaddingPx).roundToInt()
+            val actionsX = (constraints.maxWidth - (actionsPlaceable?.width
+                ?: 0) - horizontalPaddingPx).roundToInt()
             val actionsY = ((collapsedHeightPx - (actionsPlaceable?.height ?: 0)) / 2).roundToInt()
 
             // Current coordinates of title
@@ -240,14 +245,16 @@ fun PizzaToolbar(
 
             if (expandedTitlePlaceable != null && collapsedTitlePlaceable != null) {
                 // Measuring toolbar collapsing distance
-                val heightOffsetLimitPx = expandedTitlePlaceable.height + expandedTitleBottomPaddingPx
+                val heightOffsetLimitPx =
+                    expandedTitlePlaceable.height + expandedTitleBottomPaddingPx
                 scrollBehavior?.state?.heightOffsetLimit = when (centralContent) {
                     null -> -heightOffsetLimitPx
                     else -> -1f
                 }
 
                 // Toolbar height at fully expanded state
-                val fullyExpandedHeightPx = MinCollapsedHeight.toPx() + heightOffsetLimitPx + topContentHeight
+                val fullyExpandedHeightPx =
+                    minCollapsedHeight.toPx() + heightOffsetLimitPx + topContentHeight
 
                 // Coordinates of fully expanded title
                 val fullyExpandedTitleX = horizontalPaddingPx
@@ -256,19 +263,27 @@ fun PizzaToolbar(
 
                 // Coordinates of fully collapsed title
                 val fullyCollapsedTitleX = navigationIconOffset
-                val fullyCollapsedTitleY = collapsedHeightPx / 2 - CollapsedTitleLineHeight.toPx().roundToInt() / 2
+                val fullyCollapsedTitleY =
+                    collapsedHeightPx / 2 - collapsedTitleLineHeight.toPx().roundToInt() / 2
 
                 // Current height of toolbar
-                layoutHeightPx = lerp(fullyExpandedHeightPx, collapsedHeightPx + topContentHeight, collapsedFraction)
+                layoutHeightPx = lerp(
+                    fullyExpandedHeightPx,
+                    collapsedHeightPx + topContentHeight,
+                    collapsedFraction
+                )
 
                 // Current coordinates of collapsing title
-                collapsingTitleX = lerp(fullyExpandedTitleX, fullyCollapsedTitleX, collapsedFraction).roundToInt()
-                collapsingTitleY = lerp(fullyExpandedTitleY, fullyCollapsedTitleY, collapsedFraction).roundToInt()
+                collapsingTitleX =
+                    lerp(fullyExpandedTitleX, fullyCollapsedTitleX, collapsedFraction).roundToInt()
+                collapsingTitleY =
+                    lerp(fullyExpandedTitleY, fullyCollapsedTitleY, collapsedFraction).roundToInt()
             } else {
                 scrollBehavior?.state?.heightOffsetLimit = -1f
             }
 
-            val toolbarHeightPx = layoutHeightPx.roundToInt() + (additionalContentPlaceable?.height ?: 0) // + (topContentPlaceable?.height ?: 0)
+            val toolbarHeightPx = layoutHeightPx.roundToInt() + (additionalContentPlaceable?.height
+                ?: 0) // + (topContentPlaceable?.height ?: 0)
 
             // Placing toolbar widgets:
 
@@ -303,8 +318,6 @@ fun PizzaToolbar(
                         y = collapsingTitleY,
                         layerBlock = { alpha = collapsedFraction }
                     )
-
-
                 }
 
                 topContentPlaceable?.placeRelative(
@@ -336,24 +349,26 @@ data class CollapsingTitle(
 
     companion object {
         @Composable
-        fun large(titleText: String) = CollapsingTitle(titleText, MaterialTheme.typography.headlineLarge)
+        fun large(titleText: String) =
+            CollapsingTitle(titleText, MaterialTheme.typography.headlineLarge)
 
         @Composable
-        fun medium(titleText: String) = CollapsingTitle(titleText, MaterialTheme.typography.headlineMedium)
+        fun medium(titleText: String) =
+            CollapsingTitle(titleText, MaterialTheme.typography.headlineMedium)
     }
 
 }
 
-private val MinCollapsedHeight = 10.dp  // 56.dp
-private val HorizontalPadding = 5.dp
-private val ExpandedTitleBottomPadding = 1.dp
-private val CollapsedTitleLineHeight = 28.sp //28.sp
-private val DefaultCollapsedElevation = 4.dp
+private val minCollapsedHeight = 10.dp
+private val horizontalPadding = 5.dp
+private val expandedTitleBottomPadding = 1.dp
+private val collapsedTitleLineHeight = 28.sp
+private val defaultCollapsedElevation = 4.dp
 
-private const val ExpandedTitleId = "expandedTitle"
-private const val CollapsedTitleId = "collapsedTitle"
-private const val NavigationIconId = "navigationIcon"
-private const val ActionsId = "actions"
-private const val CentralContentId = "centralContent"
-private const val AdditionalContentId = "additionalContent"
-private const val TopContentId = "topContent"
+private const val EXPANDED_TITLE_ID = "expandedTitle"
+private const val COLLAPSED_TITLE_ID = "collapsedTitle"
+private const val NAVIGATION_ICON_ID = "navigationIcon"
+private const val ACTIONS_ID = "actions"
+private const val CENTRAL_CONTENT_ID = "centralContent"
+private const val ADDITIONAL_CONTENT_ID = "additionalContent"
+private const val TOP_CONTENT_ID = "topContent"

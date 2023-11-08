@@ -5,11 +5,9 @@ import com.example.pizzademoapp.data.net.FoodRequest
 import com.example.pizzademoapp.domain.models.GoodItem
 
 
+class NetStorageImpl : NetStorage {
 
-
-class NetStorageImpl : NetStorage{
-
-   override suspend fun getDishesByName(name: String): MutableList<GoodItem> {
+    override suspend fun getDishesByName(name: String): MutableList<GoodItem> {
         val response = FoodRequest.apiService.getDishesByName(name)
         return mapDTOtoGoodItem(response)
     }

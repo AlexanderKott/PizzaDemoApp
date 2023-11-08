@@ -12,7 +12,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -33,15 +32,15 @@ fun TopAdvertisement(viewModel: MainViewModel = koinViewModel()) {
         modifier = Modifier.fillMaxWidth()
     ) {
 
-        when(adToDisplay){
-            is  Advertisement.Ads -> {
+        when (adToDisplay) {
+            is Advertisement.Ads -> {
                 items(adToDisplay.items) { item ->
                     Card(
                         shape = RoundedCornerShape(size = 8.dp),
                         elevation = CardDefaults.cardElevation(
                             defaultElevation = 8.dp
                         ),
-                        modifier = Modifier.clickable {  }
+                        modifier = Modifier.clickable { }
 
                     ) {
                         Image(
@@ -55,6 +54,7 @@ fun TopAdvertisement(viewModel: MainViewModel = koinViewModel()) {
                     }
                 }
             }
+
             else -> {}
         }
     }

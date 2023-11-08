@@ -6,7 +6,7 @@ import com.example.pizzademoapp.presentation.models.MenuDerictoryItem
 
 
 interface FoodRepository {
-  suspend fun getItemsById(param : String): List<GoodItem>
-  suspend fun getMenuDirectories(): List<MenuDerictoryItem>
-  suspend fun getBanners(): List<Banner>
+    suspend fun getItemsById(param: String): List<GoodItem>
+    suspend fun getMenuDirectories(): List<MenuDerictoryItem>
+    suspend fun getBanners(): List<Banner>
 }

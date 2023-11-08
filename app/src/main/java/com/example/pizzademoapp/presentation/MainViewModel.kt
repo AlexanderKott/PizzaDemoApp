@@ -1,6 +1,5 @@
 package com.example.pizzademoapp.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pizzademoapp.domain.models.GoodItem
@@ -11,12 +10,9 @@ import com.example.pizzademoapp.presentation.models.Advertisement
 import com.example.pizzademoapp.presentation.models.Menu
 import com.example.pizzademoapp.presentation.models.MenuDerictoryItem
 import com.example.pizzademoapp.presentation.models.MenuDirectoryID
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -52,10 +48,10 @@ class MainViewModel(
 
         }
     }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Lazily,
-            initialValue = Menu.MenuItems(items = listOf())
-        )
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = Menu.MenuItems(items = listOf())
+    )
 
     private val menuDirectoriesHorizontalTrigger = MutableSharedFlow<Unit>(replay = 1)
     val menuDirectoriesHorizontal: StateFlow<List<MenuDerictoryItem>> = flow {

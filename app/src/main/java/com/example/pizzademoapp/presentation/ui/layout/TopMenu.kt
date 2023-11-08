@@ -1,6 +1,5 @@
 package com.example.pizzademoapp.presentation.ui.layout
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -30,14 +29,11 @@ import com.example.pizzademoapp.R
 
 @Composable
 fun TopMenu() {
-
-    val context = LocalContext.current
     val listItems = arrayOf("Москва", "Санкт-Петербург", "Другие города...")
 
     var expanded by remember {
         mutableStateOf(false)
     }
-
 
     Row {
 
@@ -46,7 +42,9 @@ fun TopMenu() {
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.White,
             ),
-            modifier = Modifier.defaultMinSize(minWidth = 3.dp, minHeight = 3.dp).padding(start = 10.dp),
+            modifier = Modifier
+                .defaultMinSize(minWidth = 3.dp, minHeight = 3.dp)
+                .padding(start = 10.dp),
             contentPadding = PaddingValues(4.dp)
         ) {
             Text(
@@ -66,12 +64,10 @@ fun TopMenu() {
             painter = painterResource(id = R.drawable.qr_code_scanner),
             contentDescription = "",
             modifier = Modifier
-                .padding(top= 10.dp , end = 22.dp)
+                .padding(top = 10.dp, end = 22.dp)
                 .size(29.dp)
         )
     }
-
-
     DropdownMenu(
         expanded = expanded,
         onDismissRequest = {
