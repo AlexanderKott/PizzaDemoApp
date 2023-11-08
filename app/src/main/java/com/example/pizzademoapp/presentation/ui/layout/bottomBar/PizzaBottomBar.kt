@@ -17,7 +17,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.example.pizzademoapp.R
-
 @Composable
 fun PizzaBottomBar() {
     val bottomBarItemsList = mutableListOf<BottomBarItem>()

@@ -16,19 +16,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.pizzademoapp.presentation.MainViewModel
 import com.example.pizzademoapp.presentation.models.MenuDirectoryID
 import org.koin.androidx.compose.koinViewModel
-
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun DirectoryItems(viewModel: MainViewModel = koinViewModel()) {
 
     val items by viewModel.menuDirectoriesHorizontal.collectAsState()
-
     var selectedItem by rememberSaveable { mutableStateOf(MenuDirectoryID.MEAT) }
 
     LazyRow(modifier = Modifier.fillMaxWidth()) {

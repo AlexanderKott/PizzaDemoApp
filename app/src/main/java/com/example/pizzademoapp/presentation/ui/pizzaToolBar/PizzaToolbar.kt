@@ -11,9 +11,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlin.math.max
 import kotlin.math.roundToInt
-
 
 @Composable
 fun PizzaToolbar(
@@ -63,7 +60,9 @@ fun PizzaToolbar(
         else -> false
     }
 
-    val elevationState = animateDpAsState(if (showElevation) collapsedElevation else 0.dp)
+    val elevationState = animateDpAsState(if (showElevation) collapsedElevation else 0.dp,
+        label = ""
+    )
 
     Surface(
         modifier = modifier,
@@ -221,9 +220,7 @@ fun PizzaToolbar(
                 else -> minCollapsedHeight.toPx()
             }
 
-
             val topContentHeight = topContentPlaceable?.height ?: 0
-
             var layoutHeightPx = collapsedHeightPx
 
 
@@ -345,19 +342,7 @@ private fun lerp(a: Float, b: Float, fraction: Float): Float {
 data class CollapsingTitle(
     val titleText: String,
     val expandedTextStyle: TextStyle,
-) {
-
-    companion object {
-        @Composable
-        fun large(titleText: String) =
-            CollapsingTitle(titleText, MaterialTheme.typography.headlineLarge)
-
-        @Composable
-        fun medium(titleText: String) =
-            CollapsingTitle(titleText, MaterialTheme.typography.headlineMedium)
-    }
-
-}
+)
 
 private val minCollapsedHeight = 10.dp
 private val horizontalPadding = 5.dp

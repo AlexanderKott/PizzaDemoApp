@@ -31,7 +31,6 @@ fun TopAdvertisement(viewModel: MainViewModel = koinViewModel()) {
         horizontalArrangement = Arrangement.spacedBy(15.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
-
         when (adToDisplay) {
             is Advertisement.Ads -> {
                 items(adToDisplay.items) { item ->
@@ -58,5 +57,4 @@ fun TopAdvertisement(viewModel: MainViewModel = koinViewModel()) {
             else -> {}
         }
     }
-
 }

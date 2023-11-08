@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -44,9 +43,7 @@ import com.example.pizzademoapp.R
 import com.example.pizzademoapp.presentation.MainViewModel
 import com.example.pizzademoapp.presentation.models.Menu
 import org.koin.androidx.compose.koinViewModel
-
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GoodsList(paddingValues: PaddingValues, viewModel: MainViewModel = koinViewModel()) {
     val items by viewModel.menuItems.collectAsState()
@@ -126,7 +123,7 @@ fun GoodsList(paddingValues: PaddingValues, viewModel: MainViewModel = koinViewM
                                         .clip(RoundedCornerShape(10.dp))
                                 )
 
-                                Column() {
+                                Column {
                                     Text(
                                         text = item.name,
                                         modifier = Modifier
@@ -167,7 +164,6 @@ fun GoodsList(paddingValues: PaddingValues, viewModel: MainViewModel = koinViewM
                                             colors = ButtonDefaults.textButtonColors(
                                                 contentColor = Color.Red
                                             ),
-
                                             ) {
                                             Text(text = "от ${item.price} руб")
                                         }

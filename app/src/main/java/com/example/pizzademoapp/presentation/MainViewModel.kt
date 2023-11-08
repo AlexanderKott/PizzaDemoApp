@@ -8,7 +8,7 @@ import com.example.pizzademoapp.domain.usecases.GetGoodsUseCase
 import com.example.pizzademoapp.domain.usecases.GetMenuDirectoriesUseCase
 import com.example.pizzademoapp.presentation.models.Advertisement
 import com.example.pizzademoapp.presentation.models.Menu
-import com.example.pizzademoapp.presentation.models.MenuDerictoryItem
+import com.example.pizzademoapp.presentation.models.MenuDirectoryItem
 import com.example.pizzademoapp.presentation.models.MenuDirectoryID
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -54,7 +54,7 @@ class MainViewModel(
     )
 
     private val menuDirectoriesHorizontalTrigger = MutableSharedFlow<Unit>(replay = 1)
-    val menuDirectoriesHorizontal: StateFlow<List<MenuDerictoryItem>> = flow {
+    val menuDirectoriesHorizontal: StateFlow<List<MenuDirectoryItem>> = flow {
         menuDirectoriesHorizontalTrigger.emit(Unit)
         menuDirectoriesHorizontalTrigger.collect {
             val items = getAdds.execute()

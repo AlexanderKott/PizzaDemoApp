@@ -22,8 +22,5 @@ object FoodRequest {
         .client(client)
         .build()
 
-
     val apiService: ApiService = retrofit.create()
-
-
 }

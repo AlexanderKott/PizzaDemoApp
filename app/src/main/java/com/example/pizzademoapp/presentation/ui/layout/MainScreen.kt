@@ -31,10 +31,3 @@ fun MainScreen() {
         GoodsList(paddingValues)
     }
 }
-
-
-
-
-
-
-

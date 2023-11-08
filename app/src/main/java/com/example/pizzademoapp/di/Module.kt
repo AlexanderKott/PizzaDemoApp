@@ -11,15 +11,12 @@ import com.example.pizzademoapp.presentation.MainViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-
 val appModule = module {
-
     single<NetStorage> { NetStorageImpl() }
     factory { GetGoodsUseCase(get()) }
     factory { GetMenuDirectoriesUseCase(get()) }
     factory { GetBannersUseCase(get()) }
     single<FoodRepository> { FoodRepositoryImpl(get()) }
-
     viewModel { MainViewModel(get(), get(), get()) }
 }
 
